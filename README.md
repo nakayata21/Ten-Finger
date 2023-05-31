@@ -5,4 +5,4 @@
 
 https://github.com/nakayata21/Ten-Finger/assets/109234333/d438d55c-eceb-4cfe-a772-2d880f1b9137
 
-linke burdan ulaşabilirsininz:https://nakayata21.github.io/Ten-Finger/
+link:https://nakayata21.github.io/Ten-Finger/
