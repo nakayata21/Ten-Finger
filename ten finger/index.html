@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <link rel="stylesheet" href="stlyes.css">
+ <script src="script.js"></script>
+ <style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f2f2f2;
+  }
+
+  h1 {
+      color: #333;
+    }
+
+    #startButton {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+
+    #keyboardWrapper {
+      display: none;
+    }
+
+    #score {
+      
+      font-size: 25px;
+      margin-top: 14px;  
+       animation: Color 6s linear infinite;
+    -webkit-animation: Color 4s ease-in-out infinite;
+  
+     
+}
+
+@keyframes Color {0%{
+    color:#090d04;
+  }
+  
+  20%{
+    color:#bfc4c6;
+  }
+  
+  40%{
+    color:#0a0802;
+  }
+  
+  60%{
+    color:#d2c9c8;
+  }
+  
+  80%{
+    color:#000000;
+  }
+  
+  100%{
+    color:#d8d8d8;
+  }
+}
+      
+
+    #timer {
+      font-size: 18px;
+      margin-top: 10px;
+      animation: Color 8s linear infinite;
+    -webkit-animation: Color 6s ease-in-out infinite;
+    }
+
+    .selected {
+      animation: shake 0.8s infinite;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+      25% {
+        transform: translateX(-5px);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+      75% {
+        transform: translateX(-5px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+      
+   </style>
+</head>
+<body>
+  <div id="startButton">Oyuna Başla</div>
+
+  <div id="keyboardWrapper">
+  <div id="score">Skor: 0</div>
+  <div id="timer">Kalan süre: 60 saniye</div>
+  <h1 class="title"> be fast to win</h1>
+  
+  
+  <div class="border">
+    <ul class="row row-0">
+    <li class="pinky" id="esc">ESC</li>
+    <li class="pinky" id="1">1</li>
+    <li class="ring" id="2">2</li>
+    <li class="middle" id="3">3</li>
+    <li class="pointer1st" id="4">4</li>
+    <li class="pointer2nd" id="5">5</li>
+    <li class="pointer2nd" id="6">6</li>
+    <li class="pointer1st" id="7">7</li>
+    <li class="middle" id="8">8</li>
+    <li class="ring" id="9">9</li>
+    <li class="pinky" id="10">0</li>
+    <li class="pinky" >-</li>
+    <li class="pinky" >+</li>
+    <li class="pinky" id="back">BACK</li>
+  </ul>
+  <ul class="row row-1">
+    <li class="pinky" id=" ">TAB</li>
+    <li class="pinky" id="Q">Q</li>
+    <li class="ring" id="W">W</li>
+    <li class="middle" id="E">E</li>
+    <li class="pointer1st" id="R">R</li>
+    <li class="pointer2nd" id="T">T</li>
+    <li class="pointer2nd" id="Y">Y</li>
+    <li class="pointer1st" id="U">U</li>
+    <li class="middle" id="I">I</li>
+    <li class="ring" id="O">O</li>
+    <li class="pinky" id="P">P</li>
+    <li class="pinky" >[</li>
+    <li class="pinky" >]</li>
+    <li class="pinky" >\</li>
+  </ul>
+  <ul class="row row-2">
+    <li class="pinky" id="caps">CAPS</li>
+    <li class="pinky" id="A">A</li>
+    <li class="ring" id="S">S</li>
+    <li class="middle" id="D">D</li>
+    <li class="pointer1st" id="F">F</li>
+    <li class="pointer2nd" id="G">G</li>
+    <li class="pointer2nd" id="H">H</li>
+    <li class="pointer1st" id="J">J</li>
+    <li class="middle" id="K">K</li>
+    <li class="ring" id="L">L</li>
+    <li class="pinky" >:</li>
+    <li class="pinky" >''</li>
+    <li class="pinky" id="enter">ENTER</li>
+  </ul>
+  <ul class="row row-3">
+    <li class="pinky" id="left-shift">SHIFT</li>
+    <li class="pinky" id="Z">Z</li>
+    <li class="ring" id="X">X</li>
+    <li class="middle" id="C">C</li>
+    <li class="pointer1st" id="V">V</li>
+    <li class="pointer2nd" id="B">B</li>
+    <li class="pointer2nd" id="N">N</li>
+    <li class="pointer1st" id="M">M</li>
+    <li class="middle" >,</li>
+    <li class="ring" >.</li>
+    <li class="pinky" >;</li>
+    <li class="pinky" id="right-shift">SHIFT</li>
+  </ul>
+</div>
+<h1 class="title">Hands on the keyboard</h1>
+<script> 
+
+const keys = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+    const timestamps = [];
+    let typedChars = 0;
+    let highScore = 0;
+    let remainingTime = 60;
+    let timerInterval;
+
+    function getRandomNumber(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getRandomKey() {
+      return keys[getRandomNumber(0, keys.length - 1)];
+    }
+
+    function targetRandomKey() {
+      const key = document.getElementById(getRandomKey());
+      key.classList.add("selected");
+      let start = Date.now();
+    }
+
+    function getTimestamp() {
+      return Math.floor(Date.now() / 1000);
+    }
+
+    function showKeyboard() {
+      const startButton = document.getElementById("startButton");
+      const keyboardWrapper = document.getElementById("keyboardWrapper");
+      startButton.style.display = "none";
+      keyboardWrapper.style.display = "block";
+      targetRandomKey();
+    }
+
+    document.getElementById("startButton").addEventListener("click", showKeyboard);
+
+    document.addEventListener("keydown", (event) => {
+      if (!timerInterval) {
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      const keyPressed = event.key.toUpperCase();
+      const keyElement = document.getElementById(keyPressed);
+      const highlightedKey = document.querySelector(".selected");
+
+      keyElement.classList.add("hit");
+      keyElement.addEventListener("animationend", () => {
+        keyElement.classList.remove("hit");
+      });
+
+      if (keyPressed === highlightedKey.innerHTML) {
+        timestamps.unshift(getTimestamp());
+        const elapsedTime = timestamps[0] - timestamps[1];
+        console.log(`Character per minute ${60 / elapsedTime}`);
+        highlightedKey.classList.remove("selected");
+        targetRandomKey();
+        typedChars++;
+
+        // Yeni skor, en yüksek skoru geçtiyse güncelle
+        if (typedChars > highScore) {
+          highScore = typedChars;
+        }
+        updateScore();
+      }
+    });
+
+    function updateScore() {
+      const scoreElement = document.getElementById("score");
+      scoreElement.textContent = `Skor: ${typedChars}`;
+    }
+
+    function updateTimer() {
+      const timerElement = document.getElementById("timer");
+      timerElement.textContent = `Kalan süre: ${remainingTime} saniye`;
+
+      if (remainingTime <= 0) {
+        clearInterval(timerInterval);
+        endGame();
+      }
+
+      remainingTime--;
+    }
+
+    function endGame() {
+      const keyboardWrapper = document.getElementById("keyboardWrapper");
+      keyboardWrapper.style.display = "none";
+      const resultDiv = document.createElement("div");
+      resultDiv.textContent = `Oyun Bitti! Tebrikler🫶🏻 Skor: ${typedChars}. En yüksek rekor: ${highScore}`;
+      document.body.appendChild(resultDiv);
+    }
+  </script>
+</body>
+</html>
